@@ -6,6 +6,7 @@ import { DatePicker } from "@/components/calendar/Calendar";
 import { useState } from "react";
 import HorizontalCalendar from "@/components/calendar/HorizontalCalendar";
 import Legend from "@/components/calendar/Legend";
+import DayView from "@/components/calendar/HoursOfDay";
 
 export interface IEvents {
   date: string;
@@ -83,6 +84,7 @@ export default function TaskScreen() {
     <ScrollView style={styles.scrollview} showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <HorizontalCalendar selectedDate={date} setSelectedDate={setDate} />
+        <DayView timeDivision={60} />
       </View>
     </ScrollView>
   );
@@ -91,7 +93,8 @@ export default function TaskScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     gap: 18,
   },
   scrollview: {
