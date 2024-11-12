@@ -80,10 +80,22 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="calendar"
+        key={"calendar"}
         options={{
           title: "Actividades del mes",
           tabBarIcon: ({ color }) => (
             <TabBarIconIonicons name="calendar-outline" color={color} />
+          ),
+          tabBarShowLabel: false,
+          headerTitleStyle: { fontSize: 24, fontWeight: "500" },
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "Configuración",
+          tabBarIcon: ({ color }) => (
+            <TabBarIconIonicons name="settings-outline" color={color} />
           ),
           tabBarShowLabel: false,
           headerTitleStyle: { fontSize: 24, fontWeight: "500" },

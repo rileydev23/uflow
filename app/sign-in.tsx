@@ -6,6 +6,7 @@ import { Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSession } from "./ctx";
+import { authLogin } from "@/services/auth.service";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -15,8 +16,16 @@ export default function SignIn() {
     if (!email || !password) {
       return;
     }
-    signIn({ name: "Max Valenzuela" }, "token");
-    router.replace("/(tabs)");
+
+    authLogin(email, password)
+      .then((response) => {
+        console.log(response);
+        signIn(response.data.user, response.data.token);
+        router.replace("/(tabs)");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   return (

@@ -1,0 +1,46 @@
+appId: com.uflow.kaisa
+---
+- launchApp:
+    clearState: true
+
+# run flow to open development server on expo app
+
+- tapOn: "http://10.0.2.2:8081"
+
+- assertVisible: "Inicia sesión"
+- tapOn: "Correo electrónico"
+- inputText: "jaracenaquidel@gmail.com"
+- tapOn: "Contraseña"
+- inputText: "pass"
+- tapOn: "Continuar"
+# - assertVisible: "Hola, Max Valenzuela"
+
+# tap bottombar an navigate to another screen
+- tapOn: "Crear Horario"
+
+- tapOn: "NombreHorario"
+- inputText: "Horario 2024"
+
+- tapOn: "Asignaturas"
+- inputText: "Pruebas de Software"
+
+- tapOn: "Crear"
+
+- tapOn: "Horario 2024"
+
+- tapOn: "NombreHorario"
+- inputText: "Horario 2024 Modificado"
+
+- tapOn: "Modificar"
+
+- tapOn: "Horario 2024 Modificado"
+
+- tapOn: "Eliminar"
+
+- tapOn: "AgregarNota"
+- tapOn: "Pruebas de Software"
+
+- tapOn: "Nota"
+- inputText: "6.0"
+
+- tapOn: "Agregar"

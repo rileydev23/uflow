@@ -10,6 +10,9 @@
     },
     "preview": {
       "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_API_URL_AUTH": "https://development.auth.gravat.org"
+      },
       "channel": "preview"
     },
     "production": {}

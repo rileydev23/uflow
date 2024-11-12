@@ -2,6 +2,7 @@ import {
   Button,
   Dimensions,
   FlatList,
+  Pressable,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
@@ -11,6 +12,7 @@ import { Text, View } from "@/components/Themed";
 import { useSession } from "../ctx";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ProgressChart } from "react-native-chart-kit";
+import { TextInput } from "react-native-gesture-handler";
 const { width } = Dimensions.get("window");
 
 interface SemesterCardProps {
@@ -168,7 +170,7 @@ export default function TabOneScreen() {
     },
     {
       id: "4",
-      name: "TRABAJO DE T´TITULO",
+      name: "TRABAJO DE TÍTULO",
       code: "ICC666",
       grade: 5.5,
       totalEvaluations: 2,
@@ -198,7 +200,6 @@ export default function TabOneScreen() {
         contentContainerStyle={styles.listContainer}
       />
 
-      {/* Courses Section */}
       <View style={{ flex: 4, gap: 16 }}>
         <Text style={styles.sectionTitle}>Cursos</Text>
         <FlatList
@@ -284,21 +285,6 @@ export default function TabOneScreen() {
           )}
         />
       </View>
-
-      {/* <View style={{ flex: 1 }}>
-        <Text style={styles.sectionTitle}>Tareas próximas</Text>
-        <FlatList
-          data={upcomingTasks}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.taskItem}>
-              <Text style={styles.taskName}>{item.name}</Text>
-              <Text style={styles.taskDue}>Fecha de entrega: {item.due}</Text>
-              <View></View>
-            </View>
-          )}
-        />
-      </View> */}
     </SafeAreaView>
   );
 }
