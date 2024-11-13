@@ -13,25 +13,30 @@ import { useSession } from "../ctx";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ProgressChart } from "react-native-chart-kit";
 import { TextInput } from "react-native-gesture-handler";
+import { getAllSemesters, ISemester } from "@/services/semester.service";
+import { useEffect, useState } from "react";
+import { router } from "expo-router";
 const { width } = Dimensions.get("window");
 
 interface SemesterCardProps {
-  semester: string;
+  name: string;
   course: string;
-  weeks: string;
+  currentWeek: number;
+  weeks: number;
   notes: string;
-  average: string;
+  average: number;
 }
 
 const SemesterCard = ({
-  semester,
+  name,
   course,
+  currentWeek,
   weeks,
   notes,
   average,
 }: SemesterCardProps) => (
   <View style={styles.card}>
-    <Text style={styles.title}>{semester}</Text>
+    <Text style={styles.title}>{name}</Text>
     <Text style={styles.subtitle}>{course}</Text>
 
     <View style={styles.progressContainer}>
@@ -39,7 +44,7 @@ const SemesterCard = ({
         <ProgressChart
           data={{
             labels: ["grade"],
-            data: [0.4],
+            data: [currentWeek / weeks],
           }}
           width={80}
           height={80}
@@ -55,7 +60,9 @@ const SemesterCard = ({
           style={{ alignSelf: "center", backgroundColor: "white" }}
           hideLegend
         />
-        <Text style={styles.progressLabel}>{weeks}</Text>
+        <Text style={styles.progressLabel}>
+          {currentWeek}/{weeks}
+        </Text>
         <Text style={styles.progressCaption}>Semana</Text>
       </View>
 
@@ -63,7 +70,7 @@ const SemesterCard = ({
         <ProgressChart
           data={{
             labels: ["grade"],
-            data: [0.4],
+            data: [0 / 1],
           }}
           width={80}
           height={80}
@@ -79,7 +86,7 @@ const SemesterCard = ({
           style={{ alignSelf: "center", backgroundColor: "white" }}
           hideLegend
         />
-        <Text style={styles.progressLabel}>{notes}</Text>
+        <Text style={styles.progressLabel}>{notes}/12</Text>
         <Text style={styles.progressCaption}>Notas</Text>
       </View>
 
@@ -87,7 +94,7 @@ const SemesterCard = ({
         <ProgressChart
           data={{
             labels: ["grade"],
-            data: [0.4],
+            data: [average],
           }}
           width={80}
           height={80}
@@ -103,46 +110,19 @@ const SemesterCard = ({
           style={{ alignSelf: "center", backgroundColor: "white" }}
           hideLegend
         />
-        <Text style={styles.progressLabel}>{average}</Text>
+        <Text style={styles.progressLabel}>{average}/7,0</Text>
         <Text style={styles.progressCaption}>Promedio</Text>
       </View>
     </View>
   </View>
 );
 export default function TabOneScreen() {
-  const { user } = useSession();
-  // Sample data for upcoming tasks and courses
-  const upcomingTasks = [
-    { id: "1", name: "Pruebas de Software", due: "Mañana" },
-    { id: "2", name: "Proyecto UI", due: "Lunes 26" },
-  ];
-  const dataSemesters = [
-    {
-      id: "1",
-      semester: "Semestre 3",
-      course: "Ingeniería Informática",
-      weeks: "10/20",
-      notes: "13/24",
-      average: "4.7",
-    },
-    {
-      id: "2",
-      semester: "Semestre 4",
-      course: "Ingeniería Informática",
-      weeks: "8/20",
-      notes: "15/24",
-      average: "4.5",
-    },
-    {
-      id: "3",
-      semester: "Semestre 5",
-      course: "Ingeniería Informática",
-      weeks: "12/20",
-      notes: "18/24",
-      average: "4.8",
-    },
-    // Add more cards as needed
-  ];
+  const { user, session } = useSession();
+  const [semesters, setSemesters] = useState<ISemester[]>([]);
+  const [selectedSemester, setSelectedSemester] = useState<ISemester | null>(
+    null
+  );
+
   const courses = [
     {
       id: "1",
@@ -178,19 +158,25 @@ export default function TabOneScreen() {
     },
   ];
 
+  useEffect(() => {
+    if (!session) return;
+    getAllSemesters(user._id, session).then((data) => setSemesters(data));
+  }, [session]);
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.greeting}>Hola, {user.name}!</Text>
 
       <FlatList
-        data={dataSemesters}
-        keyExtractor={(item) => item.id}
+        data={semesters}
+        keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <SemesterCard
-            semester={item.semester}
-            course={item.course}
-            weeks={item.weeks}
-            notes={item.notes}
+            name={item.name}
+            course={"INGENIERÍA INFORMÁTICA"}
+            currentWeek={item.currentWeek}
+            weeks={item.weeksDuration}
+            notes={"1"}
             average={item.average}
           />
         )}
@@ -198,17 +184,23 @@ export default function TabOneScreen() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
+        onViewableItemsChanged={(viewableItems) => {
+          setSelectedSemester(viewableItems.viewableItems[0].item);
+        }}
       />
 
-      <View style={{ flex: 4, gap: 16 }}>
+      <View style={{ flex: 8, gap: 16 }}>
         <Text style={styles.sectionTitle}>Cursos</Text>
         <FlatList
-          data={courses}
-          keyExtractor={(item) => item.id}
+          data={selectedSemester?.subjects}
+          keyExtractor={(item) => item._id}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ gap: 8 }}
+          contentContainerStyle={{ gap: 8, flex: 1 }}
           renderItem={({ item }) => (
-            <TouchableOpacity style={styles.courseItem}>
+            <TouchableOpacity
+              style={styles.courseItem}
+              onPress={() => router.push(`/(modals)/details/${item._id}`)}
+            >
               <View style={{ gap: 2, flex: 1 }}>
                 <Text style={styles.courseName}>{item.name}</Text>
                 <Text style={styles.courseCode}>{item.code}</Text>
@@ -217,7 +209,7 @@ export default function TabOneScreen() {
                 <ProgressChart
                   data={{
                     labels: ["grade"],
-                    data: [item.currentEvaluation / item.totalEvaluations],
+                    data: [1 / 1],
                   }}
                   width={80}
                   height={80}
@@ -244,14 +236,14 @@ export default function TabOneScreen() {
                     right: 0,
                   }}
                 >
-                  {item.currentEvaluation}/{item.totalEvaluations}
+                  1/1
                 </Text>
               </View>
               <View style={{ width: 80, height: 80 }}>
                 <ProgressChart
                   data={{
                     labels: ["grade"],
-                    data: [item.grade / 7],
+                    data: [item.average / 7],
                   }}
                   width={80}
                   height={80}
@@ -278,10 +270,23 @@ export default function TabOneScreen() {
                     right: 0,
                   }}
                 >
-                  {item.grade}
+                  {item.average}
                 </Text>
               </View>
             </TouchableOpacity>
+          )}
+          ListEmptyComponent={() => (
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text
+                style={{
+                  textAlign: "center",
+
+                  opacity: 0.5,
+                }}
+              >
+                No hay cursos en este semestre
+              </Text>
+            </View>
           )}
         />
       </View>
@@ -300,7 +305,7 @@ const styles = StyleSheet.create({
   greeting: {
     fontSize: 24,
     fontWeight: "600",
-    paddingVertical: 16,
+    paddingVertical: 8,
   },
   sectionTitle: { fontSize: 18, fontWeight: "500" },
   taskItem: {

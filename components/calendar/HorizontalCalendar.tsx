@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -55,6 +55,10 @@ const HorizontalCalendar = ({
   }, [selectedDate]);
 
   suscribeToChange();
+
+  useEffect(() => {
+    suscribeToChange();
+  }, []);
 
   return (
     <View style={styles.container}>

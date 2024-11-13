@@ -6,6 +6,13 @@ import {
 } from "react";
 import { useStorageState } from "./useStorageState";
 
+interface IUser {
+  _id: string;
+  name: string;
+  email: string;
+  avatarUrl: string;
+}
+
 const AuthContext = createContext<{
   signIn: (user: any, token: string) => void;
   signOut: () => void;

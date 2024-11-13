@@ -60,6 +60,7 @@ function RootLayoutNav() {
         <GestureHandlerRootView>
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(modals)" options={{ headerShown: false }} />
             <Stack.Screen name="sign-in" options={{ headerShown: false }} />
             <Stack.Screen name="modal" options={{ presentation: "modal" }} />
           </Stack>

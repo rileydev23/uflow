@@ -1,7 +1,7 @@
 export async function authLogin(email: string, password: string): Promise<any> {
   console.log(email, password, JSON.stringify({ email, password }));
   const response = await fetch(
-    `${process.env.EXPO_PUBLIC_API_URL_AUTH}/api/auth/login`,
+    `${process.env.EXPO_PUBLIC_API_URL_UFLOW}/api/auth/login`,
     {
       method: "POST",
       headers: {
