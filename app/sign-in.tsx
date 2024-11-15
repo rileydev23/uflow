@@ -73,6 +73,26 @@ export default function SignIn() {
       <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
         <Text style={styles.continueButtonText}>Continuar</Text>
       </TouchableOpacity>
+      <View
+        style={{
+          opacity: 0.3,
+          flex: 1,
+          justifyContent: "flex-end",
+
+          height: "100%",
+        }}
+      >
+        <Text
+          style={{
+            textAlign: "center",
+            fontSize: 14,
+            color: "#007AFF",
+            fontWeight: "400",
+          }}
+        >
+          Version 1.0.2
+        </Text>
+      </View>
     </SafeAreaView>
   );
 }
