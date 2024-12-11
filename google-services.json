@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "518669664278",
+    "project_id": "uflow-medusa",
+    "storage_bucket": "uflow-medusa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518669664278:android:2cb2fc7bd16c872bdeb537",
+        "android_client_info": {
+          "package_name": "com.uflow.kaisa.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkc0NgNbGgsxJ0e13L5_yhNUy0cEYEjwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518669664278:android:fbb6c7ef50d4b24edeb537",
+        "android_client_info": {
+          "package_name": "com.uflow.kaisa.preview"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkc0NgNbGgsxJ0e13L5_yhNUy0cEYEjwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
