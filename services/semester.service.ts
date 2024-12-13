@@ -60,3 +60,25 @@ export async function getAllSemesters(
   }
   throw new Error(json?.error || "Failed to get all semesters");
 }
+
+export async function getEventsFromSubjectId(
+  userId: string,
+  subjectId: string,
+  token: string
+): Promise<any> {
+  const response = await fetch(
+    `${process.env.EXPO_PUBLIC_API_URL_UFLOW}/api/subjects/${subjectId}/events`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+    }
+  );
+  const json = await response.json();
+  if (response.ok) {
+    return json;
+  }
+  throw new Error(json?.error || "Failed to get events from subject");
+}

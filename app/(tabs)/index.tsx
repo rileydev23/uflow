@@ -1,18 +1,14 @@
 import {
-  Button,
   Dimensions,
   FlatList,
-  Pressable,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
 
-import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import { useSession } from "../ctx";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ProgressChart } from "react-native-chart-kit";
-import { TextInput } from "react-native-gesture-handler";
 import { getAllSemesters, ISemester } from "@/services/semester.service";
 import { useEffect, useState } from "react";
 import { router } from "expo-router";
@@ -122,41 +118,6 @@ export default function TabOneScreen() {
   const [selectedSemester, setSelectedSemester] = useState<ISemester | null>(
     null
   );
-
-  const courses = [
-    {
-      id: "1",
-      name: "ESPECIALIZACIÓN TECNOLÓGICA III",
-      code: "ICC737",
-      grade: 6.5,
-      totalEvaluations: 7,
-      currentEvaluation: 3,
-    },
-    {
-      id: "2",
-      name: "PRUEBAS DE SOFTWARE",
-      code: "ICC735",
-      grade: 4.1,
-      totalEvaluations: 3,
-      currentEvaluation: 1,
-    },
-    {
-      id: "3",
-      name: "ARQUITECTURA DE SOFTWARE",
-      code: "ICC731",
-      grade: 2.5,
-      totalEvaluations: 5,
-      currentEvaluation: 2,
-    },
-    {
-      id: "4",
-      name: "TRABAJO DE TÍTULO",
-      code: "ICC666",
-      grade: 5.5,
-      totalEvaluations: 2,
-      currentEvaluation: 1,
-    },
-  ];
 
   useEffect(() => {
     if (!session) return;
