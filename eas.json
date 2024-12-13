@@ -15,7 +15,7 @@
       "distribution": "internal",
       "env": {
         "EXPO_PUBLIC_API_URL_UFLOW": "https://uflow.aracena.dev",
-        "APP_VARIANT": "development"
+        "APP_VARIANT": "preview"
       },
       "channel": "preview"
     },
