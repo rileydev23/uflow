@@ -40,7 +40,7 @@ const SemesterCard = ({
         <ProgressChart
           data={{
             labels: ["grade"],
-            data: [currentWeek / weeks],
+            data: [currentWeek / weeks > 1 ? 1 : currentWeek / weeks],
           }}
           width={80}
           height={80}
