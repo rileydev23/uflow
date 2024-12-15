@@ -46,7 +46,6 @@ export default function TaskScreen() {
       return;
     }
     getAllEventsForUser(user._id, session).then((res) => {
-      console.log(res);
       setEvents(res);
       setRefreshing(false);
     });

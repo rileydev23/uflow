@@ -19,7 +19,6 @@ export default function SignIn() {
 
     authLogin(email, password)
       .then((response) => {
-        console.log(response);
         signIn(response.data.user, response.data.token);
         router.replace("/(tabs)");
       })

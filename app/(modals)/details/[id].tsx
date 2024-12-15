@@ -25,7 +25,6 @@ export default function EventsFromSubjectId() {
   const [data, setData] = useState<any>([]);
 
   useEffect(() => {
-    console.log("EventsFromSubjectId", id, user, session);
     if (!session) return;
     getEventsFromSubjectId(user._id, id as string, session).then(setData);
   }, [id]);

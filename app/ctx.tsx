@@ -39,7 +39,7 @@ export function useSession() {
   return value;
 }
 
-export function SessionProvider({ children }: PropsWithChildren) {
+export function SessionProvider({ children }: Readonly<PropsWithChildren>) {
   const [[isLoading, session], setSession] = useStorageState("session");
   const [[isLoadingUser, user], setUser] = useStorageState("usersession");
 
@@ -47,7 +47,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
     return {
       signIn: (user: any, token: string) => {
         // Perform sign-in logic here
-        console.log("Signing in", user, token);
+
         const stringifiedUser = JSON.stringify(user);
         setUser(stringifiedUser);
         setSession(token);

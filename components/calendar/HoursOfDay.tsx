@@ -45,7 +45,6 @@ const recordOfColors: Record<
 };
 
 const DayView = ({ timeDivision, currentEvents }: IDayViewProps) => {
-  console.log(currentEvents);
   const hours = timeDivisionFn(timeDivision);
   return (
     <ScrollView style={styles.container}>

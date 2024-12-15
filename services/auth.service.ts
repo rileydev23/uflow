@@ -1,5 +1,4 @@
 export async function authLogin(email: string, password: string): Promise<any> {
-  console.log(email, password, JSON.stringify({ email, password }));
   const response = await fetch(
     `${process.env.EXPO_PUBLIC_API_URL_UFLOW}/api/auth/login/`,
     {
@@ -10,11 +9,10 @@ export async function authLogin(email: string, password: string): Promise<any> {
       body: JSON.stringify({ email, password }),
     }
   );
-  console.log(response);
+
   const json = await response.json();
-  console.log(json);
+
   if (response.ok) {
-    console.log(json);
     return json;
   }
   throw new Error(json?.error || "Failed to login");
@@ -36,11 +34,10 @@ export async function setNotificationToken(
       body: JSON.stringify({ notificationToken }),
     }
   );
-  console.log(response);
+
   const json = await response.json();
-  console.log(json);
+
   if (response.ok) {
-    console.log(json);
     return json;
   }
   throw new Error(json?.error || "Failed to set notification token");

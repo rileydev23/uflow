@@ -37,7 +37,7 @@ function useNotificationObserver() {
 
     function redirect(notification: Notifications.Notification) {
       const url = notification.request.content.data?.url;
-      console.log("url", url);
+
       if (url) {
         router.push(url);
       }

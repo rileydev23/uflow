@@ -157,7 +157,6 @@ export const DatePicker = ({
                   | null
                   | undefined;
               }) => {
-                console.log(day.key);
                 const eventsToday = events.filter(
                   ({ event }) =>
                     new Date(event.date).getDate() === day.day &&
@@ -165,8 +164,6 @@ export const DatePicker = ({
                     new Date(event.date).getFullYear() ===
                       day.date.getFullYear()
                 );
-
-                console.log(eventsToday);
 
                 // validate if inside array, event.type is = "task"
                 const hasTask = false;
