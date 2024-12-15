@@ -82,3 +82,24 @@ export async function getEventsFromSubjectId(
   }
   throw new Error(json?.error || "Failed to get events from subject");
 }
+
+export async function getAllEventsForUser(
+  userId: string,
+  token: string
+): Promise<any> {
+  const response = await fetch(
+    `${process.env.EXPO_PUBLIC_API_URL_UFLOW}/api/users/${userId}/events`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+    }
+  );
+  const json = await response.json();
+  if (response.ok) {
+    return json;
+  }
+  throw new Error(json?.error || "Failed to get all events");
+}

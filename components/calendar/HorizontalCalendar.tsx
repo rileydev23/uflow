@@ -26,7 +26,7 @@ const getDaysInMonth = (date: Date) => {
 const HorizontalCalendar = ({
   selectedDate,
   setSelectedDate,
-  label = "",
+  eventsForMonth = 0,
 }: DatePickerProps) => {
   const daysInMonth = getDaysInMonth(selectedDate);
 
@@ -71,7 +71,9 @@ const HorizontalCalendar = ({
               selectedDate.toLocaleString("es-ES", { month: "long" })
             )}
           </Text>
-          <Text style={styles.activitiesText}>5 actividades este mes</Text>
+          <Text style={styles.activitiesText}>
+            {eventsForMonth} actividades este mes
+          </Text>
         </View>
         <TouchableOpacity
           onPress={() => setSelectedDate(new Date())}

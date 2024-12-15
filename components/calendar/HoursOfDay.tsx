@@ -1,8 +1,13 @@
+import { IEvent, IEventSubject } from "@/app/(tabs)/task";
 import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 
 interface IDayViewProps {
   timeDivision: 60 | 30 | 15;
+  currentEvents?: {
+    subject: IEventSubject;
+    event: IEvent;
+  }[];
 }
 
 function timeDivisionFn(timeDivision: 60 | 30 | 15) {
@@ -14,7 +19,12 @@ function timeDivisionFn(timeDivision: 60 | 30 | 15) {
     const minute = (i % intervalsPerHour) * timeDivision;
     const formattedHour = hour % 12 || 12;
     const period = hour < 12 ? "am" : "pm";
-    return `${formattedHour}:${minute.toString().padStart(2, "0")} ${period}`;
+    return {
+      text: `${formattedHour}:${minute.toString().padStart(2, "0")} ${period}`,
+      hour: `${hour.toString().padStart(2, "0")}:${minute
+        .toString()
+        .padStart(2, "0")}`,
+    };
   });
   return hours;
 }
@@ -24,78 +34,49 @@ const recordOfColors: Record<
   { naturalColor: string; lighterColor: string }
 > = {
   task: { naturalColor: "#A8E6CF", lighterColor: "#C6E6CF" },
-  personalEvent: {
+  no_Evaluado: {
     naturalColor: "#FFB6C1",
     lighterColor: "#FFCBD1",
   },
-  evaluatedEvent: {
+  evaluado: {
     naturalColor: "#FFD3B6",
     lighterColor: "#FFE3C6",
   },
 };
 
-const DayView = ({ timeDivision }: IDayViewProps) => {
+const DayView = ({ timeDivision, currentEvents }: IDayViewProps) => {
+  console.log(currentEvents);
   const hours = timeDivisionFn(timeDivision);
   return (
     <ScrollView style={styles.container}>
       {hours.map((hour, index) => (
         <View key={index} style={styles.hourRow}>
           <View style={styles.timeHeader}>
-            <Text style={styles.hourText}>{hour}</Text>
+            <Text style={styles.hourText}>{hour.text}</Text>
             <View style={{ height: 1, backgroundColor: "#DDD", flex: 1 }} />
           </View>
 
           <View style={styles.eventContainer}>
-            {hour === "8:00 am" && (
-              <View style={{ gap: 4 }}>
+            {currentEvents
+              ?.filter(({ event }) => event.time?.hour === hour.hour)
+              .map(({ subject, event }, index) => (
                 <View
+                  key={index}
                   style={[
                     styles.event,
                     {
-                      backgroundColor: recordOfColors["task"].lighterColor,
+                      backgroundColor: recordOfColors[event.type].lighterColor,
                       borderLeftWidth: 4,
-                      borderLeftColor: recordOfColors["task"].naturalColor,
+                      borderLeftColor: recordOfColors[event.type].naturalColor,
                     },
                   ]}
                 >
-                  <Text style={styles.eventText}>Diseño prototipo</Text>
-                  <Text style={styles.eventTime}>8:00 - 9:00 AM</Text>
+                  <Text style={styles.eventText}>{event.title}</Text>
+                  <Text style={styles.eventSubtitle}>
+                    {subject.code} - {subject.name}
+                  </Text>
                 </View>
-                <View
-                  style={[
-                    styles.event,
-                    {
-                      backgroundColor:
-                        recordOfColors["personalEvent"].lighterColor,
-                      borderLeftWidth: 4,
-                      borderLeftColor:
-                        recordOfColors["personalEvent"].naturalColor,
-                    },
-                  ]}
-                >
-                  <Text style={styles.eventText}>Ir al cine</Text>
-                  <Text style={styles.eventTime}>8:00 - 10:00 AM</Text>
-                </View>
-              </View>
-            )}
-            {hour === "12:00 pm" && (
-              <View
-                style={[
-                  styles.event,
-                  {
-                    backgroundColor:
-                      recordOfColors["evaluatedEvent"].lighterColor,
-                    borderLeftWidth: 4,
-                    borderLeftColor:
-                      recordOfColors["evaluatedEvent"].naturalColor,
-                  },
-                  ,
-                ]}
-              >
-                <Text style={styles.eventText}>Comidita</Text>
-                <Text style={styles.eventTime}>12:00 - 1:00 PM</Text>
-              </View>
-            )}
+              ))}
           </View>
         </View>
       ))}
@@ -119,11 +100,12 @@ const styles = StyleSheet.create({
     borderColor: "#DDD",
     minHeight: 40,
     paddingHorizontal: 6,
+    gap: 6,
   },
   event: {
     padding: 12,
     borderRadius: 8,
-    gap: 2,
+    gap: 4,
   },
   eventText: {
     fontWeight: "bold",
@@ -139,6 +121,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     gap: 8,
+  },
+  eventSubtitle: {
+    fontSize: 12,
+    opacity: 0.4,
   },
 });
 

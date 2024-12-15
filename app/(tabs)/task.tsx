@@ -1,90 +1,90 @@
-import { ScrollView, StyleSheet } from "react-native";
+import { RefreshControl, ScrollView, StyleSheet } from "react-native";
 
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import { DatePicker } from "@/components/calendar/Calendar";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import HorizontalCalendar from "@/components/calendar/HorizontalCalendar";
 import Legend from "@/components/calendar/Legend";
 import DayView from "@/components/calendar/HoursOfDay";
+import { getAllEventsForUser } from "@/services/semester.service";
+import { useSession } from "../ctx";
 
-export interface IEvents {
+export interface IEvent {
   date: string;
-  hasTask: boolean;
-  hasPersonalEvent: boolean;
-  hasEvaluatedEvent: boolean;
+  id: string;
+  title: string;
+  type: "evaluado" | "no_evaluado";
+  time: {
+    date: string;
+    hour: string;
+  };
+}
+
+export interface IEventSubject {
+  id: string;
+  name: string;
+  code: string;
 }
 
 export default function TaskScreen() {
+  const { session, user } = useSession();
   const [date, setDate] = useState(new Date());
-  const events: IEvents[] = [
+
+  const [events, setEvents] = useState<
     {
-      date: "2024-11-01",
-      hasTask: true,
-      hasPersonalEvent: false,
-      hasEvaluatedEvent: true,
-    },
-    {
-      date: "2024-11-03",
-      hasTask: false,
-      hasPersonalEvent: true,
-      hasEvaluatedEvent: false,
-    },
-    {
-      date: "2024-11-09",
-      hasTask: true,
-      hasPersonalEvent: false,
-      hasEvaluatedEvent: false,
-    },
-    {
-      date: "2024-11-10",
-      hasTask: true,
-      hasPersonalEvent: true,
-      hasEvaluatedEvent: true,
-    },
-    {
-      date: "2024-11-15",
-      hasTask: true,
-      hasPersonalEvent: true,
-      hasEvaluatedEvent: false,
-    },
-    {
-      date: "2024-11-16",
-      hasTask: false,
-      hasPersonalEvent: false,
-      hasEvaluatedEvent: true,
-    },
-    {
-      date: "2024-11-18",
-      hasTask: false,
-      hasPersonalEvent: true,
-      hasEvaluatedEvent: true,
-    },
-    {
-      date: "2024-11-21",
-      hasTask: true,
-      hasPersonalEvent: false,
-      hasEvaluatedEvent: false,
-    },
-    {
-      date: "2024-11-23",
-      hasTask: true,
-      hasPersonalEvent: true,
-      hasEvaluatedEvent: false,
-    },
-    {
-      date: "2024-11-25",
-      hasTask: false,
-      hasPersonalEvent: true,
-      hasEvaluatedEvent: true,
-    },
-  ];
+      subject: IEventSubject;
+      event: IEvent;
+    }[]
+  >([]);
+
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    if (!user || !session) {
+      setRefreshing(false);
+      return;
+    }
+    getAllEventsForUser(user._id, session).then((res) => {
+      console.log(res);
+      setEvents(res);
+      setRefreshing(false);
+    });
+  }, []);
+
+  const eventsForMonth = useCallback(() => {
+    return events.filter(
+      ({ event }) => new Date(event.date).getMonth() === date.getMonth()
+    ).length;
+  }, [events]);
+
+  useEffect(() => {
+    onRefresh();
+  }, []);
+
+  const eventsBySelectedDate = useCallback(() => {
+    return events.filter(
+      ({ event }) =>
+        new Date(event.date).getDate() === date.getDate() &&
+        new Date(event.date).getMonth() === date.getMonth()
+    );
+  }, [date]);
 
   return (
-    <ScrollView style={styles.scrollview} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={styles.scrollview}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={styles.container}>
-        <HorizontalCalendar selectedDate={date} setSelectedDate={setDate} />
-        <DayView timeDivision={60} />
+        <HorizontalCalendar
+          selectedDate={date}
+          setSelectedDate={setDate}
+          eventsForMonth={eventsForMonth()}
+        />
+        <DayView timeDivision={60} currentEvents={eventsBySelectedDate()} />
       </View>
     </ScrollView>
   );

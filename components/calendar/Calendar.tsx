@@ -2,8 +2,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "../Themed";
 import { Key, ReactElement, JSXElementConstructor, ReactNode } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { IEvents } from "@/app/(tabs)/calendar";
+
 import DotsEvents from "./DotsEvents";
+import { IEvent, IEventSubject } from "@/app/(tabs)/task";
 
 const days = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];
 
@@ -76,13 +77,18 @@ export interface DatePickerProps {
   selectedDate: Date;
   setSelectedDate: (date: Date) => void;
   label?: string;
-  events?: IEvents[];
+  events?: {
+    subject: IEventSubject;
+    event: IEvent;
+  }[];
+  eventsForMonth?: number;
 }
 export const DatePicker = ({
   selectedDate,
   setSelectedDate,
   label = "",
   events = [],
+  eventsForMonth = 0,
 }: DatePickerProps) => {
   const handleDateChange = (date: any) => {
     setSelectedDate(date);
@@ -151,11 +157,25 @@ export const DatePicker = ({
                   | null
                   | undefined;
               }) => {
-                const event = events.find((event) => event.date === day.key);
+                console.log(day.key);
+                const eventsToday = events.filter(
+                  ({ event }) =>
+                    new Date(event.date).getDate() === day.day &&
+                    new Date(event.date).getMonth() === day.date.getMonth() &&
+                    new Date(event.date).getFullYear() ===
+                      day.date.getFullYear()
+                );
 
-                const hasTask = event?.hasTask ?? false;
-                const hasPersonalEvent = event?.hasPersonalEvent ?? false;
-                const hasEvaluatedEvent = event?.hasEvaluatedEvent ?? false;
+                console.log(eventsToday);
+
+                // validate if inside array, event.type is = "task"
+                const hasTask = false;
+                const hasNonEvaluatedEvent = eventsToday.some(
+                  ({ event }) => event.type === "no_evaluado"
+                );
+                const hasEvaluatedEvent = eventsToday.some(
+                  ({ event }) => event.type === "evaluado"
+                );
 
                 return (
                   <TouchableOpacity
@@ -192,7 +212,7 @@ export const DatePicker = ({
                     </Text>
                     <DotsEvents
                       hasTask={hasTask}
-                      hasPersonalEvent={hasPersonalEvent}
+                      hasNonEvaluatedEvent={hasNonEvaluatedEvent}
                       hasEvaluatedEvent={hasEvaluatedEvent}
                     />
                   </TouchableOpacity>

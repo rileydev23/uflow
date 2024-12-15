@@ -18,13 +18,13 @@ const Legend = () => {
           <View
             style={[styles.colorIndicator, { backgroundColor: "#FFD3B6" }]}
           />
-          <Text style={styles.legendText}>Evento Personal</Text>
+          <Text style={styles.legendText}>Evento Evaluado</Text>
         </View>
         <View style={styles.legendItem}>
           <View
             style={[styles.colorIndicator, { backgroundColor: "#FFB6C1" }]}
           />
-          <Text style={styles.legendText}>Evento Evaluado</Text>
+          <Text style={styles.legendText}>Evento No Evaluado</Text>
         </View>
         {/* <View style={styles.legendItem}>
           <View

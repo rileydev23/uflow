@@ -2,13 +2,13 @@ import { View } from "../Themed";
 
 interface DotsEventsProps {
   hasTask: boolean;
-  hasPersonalEvent: boolean;
+  hasNonEvaluatedEvent: boolean;
   hasEvaluatedEvent: boolean;
 }
 
 const DotsEvents = ({
   hasTask,
-  hasPersonalEvent,
+  hasNonEvaluatedEvent,
   hasEvaluatedEvent,
 }: DotsEventsProps) => {
   return (
@@ -36,7 +36,7 @@ const DotsEvents = ({
           }}
         />
       )}
-      {hasPersonalEvent && (
+      {hasNonEvaluatedEvent && (
         <View
           style={{
             width: 4,
