@@ -40,6 +40,7 @@ export default {
     },
     ios: {
       supportsTablet: true,
+      bundleIdentifier: "com.uflow.kaisa",
     },
     android: {
       adaptiveIcon: {
